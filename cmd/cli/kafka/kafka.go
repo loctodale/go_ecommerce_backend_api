@@ -15,13 +15,13 @@ var (
 )
 
 const (
-	kafkaUrl   = "localhost:19092"
+	kafkaUrl   = "0.0.0.0:19092"
 	kafkaTopic = "user_topic"
 )
 
 func getKafkaWriter(kafkaURL, topic string) *kafka.Writer {
 	return &kafka.Writer{
-		Addr:     kafka.TCP("localhost:19092"),
+		Addr:     kafka.TCP(kafkaURL),
 		Topic:    topic,
 		Balancer: &kafka.LeastBytes{},
 	}
@@ -30,6 +30,7 @@ func getKafkaWriter(kafkaURL, topic string) *kafka.Writer {
 func getKafkaReader(kafkaURL, topic, groupID string) *kafka.Reader {
 	brokers := strings.Split(kafkaURL, ",")
 	fmt.Println(brokers)
+	fmt.Println(topic)
 	return kafka.NewReader(kafka.ReaderConfig{
 		Brokers:        brokers,
 		GroupID:        groupID,
